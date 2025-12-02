@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
 
   return {
-    base: '/freshcart-grocers/', // <-- Important for GitHub Pages
+    base: '/FreshCart/', // <-- Important for GitHub Pages
     server: {
       port: 3000,
       host: '0.0.0.0',
