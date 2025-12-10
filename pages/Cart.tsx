@@ -13,6 +13,15 @@ const Cart: React.FC = () => {
     city: 'Lahore'
   });
 
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'paypal' | 'bank' | 'card'>('cod');
+
+  const paymentOptions = [
+    { id: 'cod', label: 'Cash on Delivery', description: 'Pay when you receive your order.' },
+    { id: 'paypal', label: 'PayPal', description: 'Pay securely using your PayPal account.' },
+    { id: 'bank', label: 'Bank Transfer', description: 'Transfer directly from your bank account.' },
+    { id: 'card', label: 'Direct Card Processing', description: 'Pay using your credit/debit card.' },
+  ];
+
   const cartItems = cart.map(item => {
     const product = products.find(p => p.id === item.productId);
     return { ...item, product };
@@ -98,14 +107,14 @@ const Cart: React.FC = () => {
                       </td>
                       <td className="py-4 px-6">
                         <div className="flex items-center justify-center border border-gray-200 rounded-lg w-max mx-auto">
-                          <button 
+                          <button
                             onClick={() => updateQuantity(item.productId, -1)}
                             className="p-2 hover:bg-gray-100 text-gray-600"
                           >
                             <Minus size={14} />
                           </button>
                           <span className="px-2 font-semibold w-8 text-center">{item.quantity}</span>
-                          <button 
+                          <button
                             onClick={() => updateQuantity(item.productId, 1)}
                             className="p-2 hover:bg-gray-100 text-gray-600"
                           >
@@ -117,7 +126,7 @@ const Cart: React.FC = () => {
                         Rs. {(item.product?.price || 0) * item.quantity}
                       </td>
                       <td className="py-4 px-6 text-right">
-                        <button 
+                        <button
                           onClick={() => removeFromCart(item.productId)}
                           className="text-red-400 hover:text-red-600 transition-colors"
                         >
@@ -139,22 +148,22 @@ const Cart: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                    <input 
+                    <input
                       required
-                      type="text" 
+                      type="text"
                       value={formData.name}
-                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      onChange={e => setFormData({ ...formData, name: e.target.value })}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
                       placeholder="Ali Khan"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-                    <input 
+                    <input
                       required
-                      type="tel" 
+                      type="tel"
                       value={formData.phone}
-                      onChange={e => setFormData({...formData, phone: e.target.value})}
+                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
                       placeholder="0300 1234567"
                     />
@@ -162,9 +171,9 @@ const Cart: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
-                  <select 
+                  <select
                     value={formData.city}
-                    onChange={e => setFormData({...formData, city: e.target.value})}
+                    onChange={e => setFormData({ ...formData, city: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
                   >
                     <option value="Lahore">Lahore</option>
@@ -174,20 +183,24 @@ const Cart: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
-                  <textarea 
+                  <textarea
                     required
                     value={formData.address}
-                    onChange={e => setFormData({...formData, address: e.target.value})}
+                    onChange={e => setFormData({ ...formData, address: e.target.value })}
                     rows={3}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
                     placeholder="House #, Street, Block..."
                   ></textarea>
                 </div>
-                
+
                 <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
                   <p className="text-sm text-yellow-800 flex items-center gap-2">
-                    <CheckCircle size={16} /> 
-                    Payment Method: <strong>Cash on Delivery</strong> (Standard)
+                    <CheckCircle size={16} />
+                    Payment Method:{" "}
+                    <strong>
+                      {paymentOptions.find(option => option.id === paymentMethod)?.label}
+                    </strong>
+                    {paymentMethod === 'cod' ? ' (Standard)' : ''}
                   </p>
                 </div>
               </form>
@@ -217,7 +230,7 @@ const Cart: React.FC = () => {
             </div>
 
             {step === 'cart' ? (
-              <button 
+              <button
                 onClick={() => setStep('checkout')}
                 className="w-full bg-[#e67e22] text-white font-bold py-4 rounded-lg hover:bg-black transition-colors shadow-md flex items-center justify-center gap-2"
               >
@@ -225,14 +238,14 @@ const Cart: React.FC = () => {
               </button>
             ) : (
               <>
-                 <button 
+                <button
                   type="submit"
                   form="checkout-form"
                   className="w-full bg-[#e67e22] text-white font-bold py-4 rounded-lg hover:bg-black transition-colors shadow-md flex items-center justify-center gap-2 mb-3"
                 >
                   Place Order
                 </button>
-                <button 
+                <button
                   onClick={() => setStep('cart')}
                   className="w-full text-gray-500 font-semibold py-2 hover:text-brand-slate transition-colors"
                 >
@@ -240,11 +253,103 @@ const Cart: React.FC = () => {
                 </button>
               </>
             )}
-            
+
+            <div className="mt-6">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Payment Method</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {paymentOptions.map(option => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setPaymentMethod(option.id as any)}
+                    className={`border rounded-lg p-4 text-left transition-all ${paymentMethod === option.id
+                        ? 'border-[#e67e22] bg-yellow-50 shadow-md'
+                        : 'border-gray-300 hover:bg-gray-50'
+                      }`}
+                  >
+                    <p className="font-semibold">{option.label}</p>
+                    {paymentMethod === option.id && (
+                      <p className="text-sm text-gray-600 mt-1">{option.description}</p>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Dynamic Payment Details */}
+              <div className="mt-4 p-4 border rounded-lg bg-gray-50">
+                {paymentMethod === 'cod' && (
+                  <p className="text-gray-700">You will pay in cash when your order is delivered.</p>
+                )}
+
+                {paymentMethod === 'paypal' && (
+                  <div className="space-y-4">
+                    <label className="block text-sm font-semibold text-gray-700">PayPal Email</label>
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
+                    />
+                  </div>
+                )}
+
+                {paymentMethod === 'bank' && (
+                  <div className="space-y-4">
+                    <label className="block text-sm font-semibold text-gray-700">Bank Name</label>
+                    <input
+                      type="text"
+                      placeholder="Enter bank name"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
+                    />
+                    <label className="block text-sm font-semibold text-gray-700">Account Number</label>
+                    <input
+                      type="text"
+                      placeholder="1234567890"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
+                    />
+                    <label className="block text-sm font-semibold text-gray-700">IBAN</label>
+                    <input
+                      type="text"
+                      placeholder="PK00XXXX0000000000"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
+                    />
+                  </div>
+                )}
+
+                {paymentMethod === 'card' && (
+                  <div className="space-y-4">
+                    <label className="block text-sm font-semibold text-gray-700">Card Number</label>
+                    <input
+                      type="text"
+                      placeholder="1234 5678 9012 3456"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
+                    />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700">Expiry Date</label>
+                        <input
+                          type="text"
+                          placeholder="MM/YY"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700">CVV</label>
+                        <input
+                          type="text"
+                          placeholder="123"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-[#e67e22] focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {deliveryFee > 0 && step === 'cart' && (
-               <p className="text-xs text-center mt-4 text-gray-400">
-                 Add items worth Rs. {2000 - subtotal} more for free delivery!
-               </p>
+              <p className="text-xs text-center mt-4 text-gray-400">
+                Add items worth Rs. {2000 - subtotal} more for free delivery!
+              </p>
             )}
           </div>
         </div>
